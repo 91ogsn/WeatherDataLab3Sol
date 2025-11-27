@@ -25,6 +25,7 @@ namespace WeatherDataLab3.Core
             return query.Average();
         }
 
+
         // === Sortering varmaste till kallaste dagen enligt medeltemperatur per dag === \\
         public static IEnumerable<(DateTime Datum, double MedelTemp)>SorteraVarmastTillKallast(IQueryable<WeatherRecord> records, string plats)
         {
