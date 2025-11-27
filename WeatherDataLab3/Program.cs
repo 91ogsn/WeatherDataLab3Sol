@@ -5,6 +5,7 @@ public class Program
 {
     private static void Main(string[] args)
     {
+        // Filsökväg till csv- filen
         var filePath = "../../../TempFuktData.csv";
 
         try
