@@ -14,7 +14,7 @@ public class WeatherRecordMap : ClassMap<WeatherRecord>
     {
         Map(m => m.Datum)
             .Name("Datum")
-            .TypeConverterOption.Format("yyyy-MM-dd");
+            .TypeConverterOption.Format("yyyy-MM-dd H:mm");
 
         Map(m => m.Plats)
             .Name("Plats");

@@ -20,10 +20,10 @@ public class Program
             Console.WriteLine(ex);
             Console.ReadKey();
         }
-               
+
     }
 
-    
+
     // ==== Metoder ==== \\
     private static void InitializeData(string csvPath)
     {
@@ -31,17 +31,23 @@ public class Program
 
         using var db = new WeatherDBContext();
 
-        // Applicera migrations skapar databasen om den inte finns
+        // Applicera migrations skapar databasen om den inte finns och om tabeller saknas så kapas de
         db.Database.Migrate();
 
         // Läs in CSV endast om tabellen är tom
         if (!db.WeatherRecords.Any())
         {
             Console.WriteLine("Databasen är tom. Importerar CSV...");
-            //CsvWeatherImporter.Import(db, csvPath);
+            CsvWeatherImporter.Import(db, csvPath);
+        }
+        else
+        {
+            Console.WriteLine("Imorterar inte från CSV-fil, databasen innehåller redan data.");
         }
 
         Console.WriteLine("Databasen är redo.");
+        Console.WriteLine("Tryck på valfri för att fortsätta till menyn...");
+        Console.ReadKey();
     }
 
     private static void RunApplication()
