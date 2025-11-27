@@ -12,12 +12,12 @@ public class Program
         {
             InitializeData(filePath);
 
-            RunApplication();
+            RunAppMenu();
         }
         catch (Exception ex)
         {
             Console.WriteLine("Något gick fel, vi avbryter denna sändning...");
-            Console.WriteLine(ex);
+            Console.WriteLine(ex.ToString());
             Console.ReadKey();
         }
 
@@ -50,9 +50,73 @@ public class Program
         Console.ReadKey();
     }
 
-    private static void RunApplication()
+    public static void RunAppMenu()
     {
-        Console.WriteLine("Fixa! Ska starta meny");
-        Console.ReadKey();
+        while (true)
+        {
+            Console.Clear();
+            PrintMenuChoices();
+            
+            Console.Write("\nVälj ett alternativ (Nummer + Enter): ");
+            var choice = Console.ReadLine();
+
+            switch (choice)
+            {
+                case "1":
+                    Console.WriteLine("Utomhus - Medeltemperatur för valt datum");
+                    Console.ReadKey();
+                    break;
+                case "2":
+                    Console.WriteLine("");
+                    Console.ReadKey();
+                    break;
+                case "3":
+                    Console.WriteLine("");
+                    Console.ReadKey();
+                    break;
+                case "4":
+                    Console.WriteLine("");
+                    Console.ReadKey();
+                    break;
+                case "5":
+                    Console.WriteLine("");
+                    Console.ReadKey();
+                    break;
+                case "6":
+                    Console.WriteLine("");
+                    Console.ReadKey();
+                    break;
+                case "7":
+                    Console.WriteLine("");
+                    Console.ReadKey();
+                    break;
+
+                case "8":
+                    Console.WriteLine("Avslutar...");
+                    return;
+
+                default:
+                    Console.WriteLine("Ogiltigt val!");
+                    Console.ReadKey();
+                    break;
+            }
+        }
+    }
+    public static void PrintMenuChoices()
+    {
+        Console.WriteLine("\t============ VäderData Meny ============\n");
+        Console.WriteLine("1. Utomhus - Medeltemperatur för valt datum");
+        Console.WriteLine("2. Utomhus - Sortering av varmaste till kallaste dagen enligt medeltemperatur per dag");
+        Console.WriteLine("3. Utomhus - Sortering av torraste till fuktigaste dagen enligt medelluftfuktighet per dag");
+        Console.WriteLine("4. Utomhus - Sortering av minst till störst risk för mögel");
+        Console.WriteLine("5. Utomhus - Datum för meteorologisk Höst");
+        Console.WriteLine("6. Utomhus - Datum för meteorologisk Vinter\n");
+        Console.WriteLine("7. Inomhushus - Medeltemperatur för valt datum");
+        Console.WriteLine("8. Inomhushus - Sortering av varmaste till kallaste dagen enligt medeltemperatur per dag");
+        Console.WriteLine("7. Inomhushus - Sortering av torraste till fuktigaste dagen enligt medelluftfuktighet per dag");
+        Console.WriteLine("7. Inomhushus - Sortering av minst till störst risk för mögel");
+        Console.WriteLine("8. Avsluta Programmet");
+
+
     }
 }
