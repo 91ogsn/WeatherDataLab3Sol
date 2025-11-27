@@ -56,43 +56,59 @@ public class Program
         {
             Console.Clear();
             PrintMenuChoices();
-            
+
             Console.Write("\nVälj ett alternativ (Nummer + Enter): ");
             var choice = Console.ReadLine();
 
             switch (choice)
             {
+                // ===== Utomhus val ==== \\
                 case "1":
-                    Console.WriteLine("Utomhus - Medeltemperatur för valt datum");
+                    Console.WriteLine("1. Utomhus - Medeltemperatur för valt datum");
                     Console.ReadKey();
                     break;
                 case "2":
-                    Console.WriteLine("");
+                    Console.WriteLine("2. Utomhus - Sortering av varmaste till kallaste dagen enligt medeltemperatur per dag");
                     Console.ReadKey();
                     break;
                 case "3":
-                    Console.WriteLine("");
+                    Console.WriteLine("3. Utomhus - Sortering av torraste till fuktigaste dagen enligt medelluftfuktighet per dag");
                     Console.ReadKey();
                     break;
                 case "4":
-                    Console.WriteLine("");
+                    Console.WriteLine("4. Utomhus - Sortering av minst till störst risk för mögel");
                     Console.ReadKey();
                     break;
                 case "5":
-                    Console.WriteLine("");
+                    Console.WriteLine("5. Utomhus - Datum för meteorologisk Höst");
                     Console.ReadKey();
                     break;
                 case "6":
-                    Console.WriteLine("");
-                    Console.ReadKey();
-                    break;
-                case "7":
-                    Console.WriteLine("");
+                    Console.WriteLine("6. Utomhus - Datum för meteorologisk Vinter");
                     Console.ReadKey();
                     break;
 
+                // ===== Inomhus val ==== \\
+                case "7":
+                    Console.WriteLine("7.  Inomhus - Medeltemperatur för valt datum");
+                    Console.ReadKey();
+                    break;
                 case "8":
-                    Console.WriteLine("Avslutar...");
+                    Console.WriteLine("8.  Inomhus - Sortering av varmaste till kallaste dagen enligt medeltemperatur per dag");
+                    Console.ReadKey();
+                    break;
+                case "9":
+                    Console.WriteLine("9.  Inomhus - Sortering av torraste till fuktigaste dagen enligt medelluftfuktighet per dag");
+                    Console.ReadKey();
+                    break;
+                case "10":
+                    Console.WriteLine("10. Inomhus - Sortering av minst till störst risk för mögel");
+                    Console.ReadKey();
+                    break;
+
+
+                case "0":
+                    Console.WriteLine("Avslutar programmet...");
                     return;
 
                 default:
@@ -111,12 +127,12 @@ public class Program
         Console.WriteLine("4. Utomhus - Sortering av minst till störst risk för mögel");
         Console.WriteLine("5. Utomhus - Datum för meteorologisk Höst");
         Console.WriteLine("6. Utomhus - Datum för meteorologisk Vinter\n");
-        Console.WriteLine("7. Inomhushus - Medeltemperatur för valt datum");
-        Console.WriteLine("8. Inomhushus - Sortering av varmaste till kallaste dagen enligt medeltemperatur per dag");
-        Console.WriteLine("7. Inomhushus - Sortering av torraste till fuktigaste dagen enligt medelluftfuktighet per dag");
-        Console.WriteLine("7. Inomhushus - Sortering av minst till störst risk för mögel");
-        Console.WriteLine("8. Avsluta Programmet");
 
+        Console.WriteLine("7.  Inomhus - Medeltemperatur för valt datum");
+        Console.WriteLine("8.  Inomhus - Sortering av varmaste till kallaste dagen enligt medeltemperatur per dag");
+        Console.WriteLine("9.  Inomhus - Sortering av torraste till fuktigaste dagen enligt medelluftfuktighet per dag");
+        Console.WriteLine("10. Inomhus - Sortering av minst till störst risk för mögel");
+        Console.WriteLine("0.  Avsluta Programmet");
 
     }
 }
