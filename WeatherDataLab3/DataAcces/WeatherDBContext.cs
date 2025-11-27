@@ -10,7 +10,7 @@ public class WeatherDBContext : DbContext
 {
     // Connection string to the lokala SQL Server databasen
     private const string connectionString =
-        "Server=(localdb)\\MSSQLLocalDB;Database=EFCore;Trusted_Connection=True;";
+        "Server=(localdb)\\MSSQLLocalDB;Database=WeatherDataDB;Trusted_Connection=True;";
 
     // Konfigurera DbContext att använda SQL Server med angiven connection string
 
