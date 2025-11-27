@@ -68,8 +68,7 @@ public class Program
                     MenuMedelTemp("Ute");
                     break;
                 case "2":
-                    Console.WriteLine("2. Utomhus - Sortering av varmaste till kallaste dagen enligt medeltemperatur per dag");
-                    Console.ReadKey();
+                    MenuSorteraVarmastTillKallast("Ute");
                     break;
                 case "3":
                     Console.WriteLine("3. Utomhus - Sortering av torraste till fuktigaste dagen enligt medelluftfuktighet per dag");
@@ -93,8 +92,7 @@ public class Program
                     MenuMedelTemp("Inne");
                     break;
                 case "8":
-                    Console.WriteLine("8.  Inomhus - Sortering av varmaste till kallaste dagen enligt medeltemperatur per dag");
-                    Console.ReadKey();
+                    MenuSorteraVarmastTillKallast("Inne");
                     break;
                 case "9":
                     Console.WriteLine("9.  Inomhus - Sortering av torraste till fuktigaste dagen enligt medelluftfuktighet per dag");
@@ -166,6 +164,30 @@ public class Program
             Console.WriteLine($"Medeltemperatur {plats} den {date:yyyy-MM-dd}: {avg:F2} °C");
         else
             Console.WriteLine($"Ingen data hittades för {plats} den {date:yyyy-MM-dd}.");
+
+        Console.WriteLine("\nTryck valfri tangent för att återgå...");
+        Console.ReadKey();
+    }
+
+    // Sortera varmaste till kallaste dagen enligt medeltemperatur per dag
+    private static void MenuSorteraVarmastTillKallast(string plats)
+    {
+        Console.Clear();
+        Console.WriteLine($"Sortering: Varmast --> Kallast ({plats})\n");
+
+        using var db = new WeatherDBContext();
+        // Hämta sorterad lista från metod i WeatherCalculations
+        var lista = WeatherCalculations.SorteraVarmastTillKallast(
+            db.WeatherRecords,
+            plats
+        );
+        Console.WriteLine(" Datum       Medeltemp (visar 30 dagar)");
+        Console.WriteLine("------------------------");
+        // Skriv ut resultat till användaren (första 30 dagarna)
+        foreach (var dag in lista.Take(30)) 
+        {
+            Console.WriteLine($"{dag.Datum:yyyy-MM-dd}  {dag.MedelTemp:F2} °C");
+        }
 
         Console.WriteLine("\nTryck valfri tangent för att återgå...");
         Console.ReadKey();
