@@ -91,5 +91,49 @@ namespace WeatherDataLab3.Core
             // Returnera datum och risk
             return query.Select(x => (x.Datum, x.MedelRisk));
         }
+
+        // === Metod för att beräkna metrologisk höst === \\
+        public static DateTime? MeteorologiskHost(IQueryable<WeatherRecord> records, string plats)
+        {
+            /* Regler från SMHI:
+             * Meteorologisk höst definieras som den första femdagarsperioden
+             * med dygnsmedeltemperatur under 10°C, tidigast från 1 augusti.
+             */
+            //Hämta DATA från SQL, filtrera bara det SQL klarar
+            var filtrerade = records
+                .Where(r => r.Plats == plats && r.Temp.HasValue)
+                .ToList();                // <-- tvingar EF Core att avsluta SQL-delen
+
+            // All logik nedan körs i C# (vilket är vad vi vill)
+            var dailyTemps = filtrerade
+                .GroupBy(r => r.Datum.Date)
+                .Select(g => new
+                {
+                    Datum = g.Key,
+                    MedelTemp = g.Average(x => x.Temp!.Value)
+                })
+                .Where(x => x.Datum >= new DateTime(x.Datum.Year, 8, 1))
+                .OrderBy(x => x.Datum)
+                .ToList();
+
+            // Leta efter första 5-dagarsperioden där alla dagar < 10°C
+            for (int i = 0; i <= dailyTemps.Count - 5; i++)
+            {
+                bool femKallaDagar =
+                    dailyTemps[i].MedelTemp < 10 &&
+                    dailyTemps[i + 1].MedelTemp < 10 &&
+                    dailyTemps[i + 2].MedelTemp < 10 &&
+                    dailyTemps[i + 3].MedelTemp < 10 &&
+                    dailyTemps[i + 4].MedelTemp < 10;
+
+                if (femKallaDagar)
+                {
+                    return dailyTemps[i].Datum; // första dagen i perioden
+                }
+            }
+
+            // Ingen meteorologiskhöst hittades
+            return null;
+        }
     }
 }

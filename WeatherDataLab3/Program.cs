@@ -78,8 +78,7 @@ public class Program
                     MenuSorteraMogelRisk("Ute");
                     break;
                 case "5":
-                    //Console.WriteLine("5. Utomhus - Datum för meteorologisk Höst");
-                    Console.ReadKey();
+                    MenuMeteorologiskHost();
                     break;
                 case "6":
                     //Console.WriteLine("6. Utomhus - Datum för meteorologisk Vinter");
@@ -115,7 +114,7 @@ public class Program
             }
         }
     }
-    // Skriv ut menyalternativ
+    // Skriv ut menyalternativ till användaren
     public static void PrintMenuChoices()
     {
         Console.WriteLine("\t============ VäderData Meny ============\n");
@@ -244,6 +243,33 @@ public class Program
         }
 
         Console.WriteLine("\nTryck valfri tangent för att komma tillbaka till meny...");
+        Console.ReadKey();
+    }
+
+    //Datum för meteorologisk Höst
+    private static void MenuMeteorologiskHost()
+    {
+        Console.Clear();
+        Console.WriteLine("Beräknar Meteorologisk höst\n");
+
+        using var db = new WeatherDBContext();
+
+        // Vi använder alltid 'Ute' för meteorologiska beräkningar.
+        var hostDatum = WeatherCalculations.MeteorologiskHost(
+            db.WeatherRecords,
+            "Ute"
+        );
+
+        if (hostDatum == null)
+        {
+            Console.WriteLine("Ingen meteorologisk höst kunde hittas.");
+        }
+        else
+        {
+            Console.WriteLine($"Meteorologisk höst inträffade: {hostDatum:yyyy-MM-dd}");
+        }
+
+        Console.WriteLine("\nTryck valfri tangent för att återgå...");
         Console.ReadKey();
     }
 }
