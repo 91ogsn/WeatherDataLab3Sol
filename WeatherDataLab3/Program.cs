@@ -81,8 +81,7 @@ public class Program
                     MenuMeteorologiskHost();
                     break;
                 case "6":
-                    //Console.WriteLine("6. Utomhus - Datum för meteorologisk Vinter");
-                    Console.ReadKey();
+                    MenuMeteorologiskVinter();
                     break;
 
                 // ===== Inomhus val ==== \\
@@ -102,8 +101,9 @@ public class Program
 
                 case "0":
                     Console.Clear();
-                    Console.WriteLine("Tryck på en tangent för att avslutar programmet...");
-                    Console.WriteLine("Made by Stefan, tack för din medverkan... May the code be with you...always");
+                    Console.WriteLine("Tryck på en tangent för att avslutar programmet...\\");
+                    Console.WriteLine("\nTack så mycket Claes för den här tiden genom kurserna, har varit kul! \n\n");
+                    Console.WriteLine("Mvh Stefan,  May the code be with you...always");
                     Console.ReadKey();
                     return;
 
@@ -267,6 +267,31 @@ public class Program
         else
         {
             Console.WriteLine($"Meteorologisk höst inträffade: {hostDatum:yyyy-MM-dd}");
+        }
+
+        Console.WriteLine("\nTryck valfri tangent för att återgå...");
+        Console.ReadKey();
+    }
+
+    //  Datum för meteorologisk Vinter
+    private static void MenuMeteorologiskVinter()
+    {
+        Console.Clear();
+        Console.WriteLine("Beräknar Meteorologisk Vinter\n");
+
+        // använder using för att hantera databasanslutningen
+        using var db = new WeatherDBContext();
+
+        // Anropar metoden för att beräkna meteorologisk vinter
+        var vinterDatum = WeatherCalculations.MeteorologiskVinter(db.WeatherRecords, "Ute");   
+        
+        if (vinterDatum == null)
+        {
+            Console.WriteLine("Ingen meteorologisk vinter kunde hittas");
+        }
+        else
+        {
+            Console.WriteLine($"Meteorologisk vinter inträffade: {vinterDatum:yyyy-MM-dd}");
         }
 
         Console.WriteLine("\nTryck valfri tangent för att återgå...");

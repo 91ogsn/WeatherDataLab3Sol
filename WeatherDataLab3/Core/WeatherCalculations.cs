@@ -80,11 +80,11 @@ namespace WeatherDataLab3.Core
                             r.Luftfuktighet.HasValue)
                 .AsEnumerable() // Gör resten av beräkningen i C#
                 .GroupBy(r => r.Datum.Date)  // Gruppera per dag               
-                .Select(g => new         
+                .Select(g => new
                 {
                     Datum = g.Key,
                     MedelRisk = g.Average(x => x.Moldrisk)  // Beräkna dagens Mögelrisk som medelvärde.
-                })                
+                })
                 .OrderBy(x => x.MedelRisk)// Sortera stigande (minst → störst risk)
                 .ToList();
 
@@ -133,6 +133,51 @@ namespace WeatherDataLab3.Core
             }
 
             // Ingen meteorologiskhöst hittades
+            return null;
+        }
+
+        // === Metod för att beräkna metrologisk vinter === \\
+        public static DateTime? MeteorologiskVinter(IQueryable<WeatherRecord> records, string plats)
+        {
+            /* Regler från SMHI:
+            * Dygnsmedeltemperatur ska vara ≤ 0°C.
+            * Detta ska inträffa fem dagar i följd.
+            */
+
+            // Filtrera data efter plats och att Temp har värde
+            var filtrerade = records
+                .Where(r => r.Plats == plats && r.Temp.HasValue)
+                .ToList();
+
+            // Beräkna dygnsmedeltemperatur och gruppera per dag
+            var dailyTemps = filtrerade
+                .GroupBy(r => r.Datum.Date)
+                .Select(g => new
+                {
+                    Datum = g.Key,
+                    MedelTemp = g.Average(x => x.Temp!.Value) 
+                })
+                .OrderBy(x => x.Datum)   // Sortera efter datum
+                .ToList();
+
+            // Hitta första 5-dagarsperioden med MedelTemp <= 0°C
+            for (int i = 0; i <= dailyTemps.Count - 5; i++)
+            {
+                bool femKallaDagar =
+                    dailyTemps[i].MedelTemp <= 0 &&
+                    dailyTemps[i + 1].MedelTemp <= 0 &&
+                    dailyTemps[i + 2].MedelTemp <= 0 &&
+                    dailyTemps[i + 3].MedelTemp <= 0 &&
+                    dailyTemps[i + 4].MedelTemp <= 0;
+
+                if (femKallaDagar)
+                {
+                    // Första dagen av de fem dagarna = vinterns ankomst
+                    return dailyTemps[i].Datum;
+                }
+            }
+
+            // Ingen vinter hittades
             return null;
         }
     }
