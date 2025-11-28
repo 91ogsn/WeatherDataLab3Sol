@@ -57,8 +57,9 @@ public class Program
         {
             Console.Clear();
             PrintMenuChoices();
-
+            Console.ForegroundColor = ConsoleColor.Yellow;
             Console.Write("\nVälj ett alternativ (Nummer + Enter): ");
+            Console.ResetColor();
             var choice = Console.ReadLine();
 
             switch (choice)
@@ -71,8 +72,7 @@ public class Program
                     MenuSorteraVarmastTillKallast("Ute");
                     break;
                 case "3":
-                    Console.WriteLine("3. Utomhus - Sortering av torraste till fuktigaste dagen enligt medelluftfuktighet per dag");
-                    Console.ReadKey();
+                    MenuSorteraTorrastTillFuktigast("Ute");
                     break;
                 case "4":
                     Console.WriteLine("4. Utomhus - Sortering av minst till störst risk för mögel");
@@ -95,8 +95,7 @@ public class Program
                     MenuSorteraVarmastTillKallast("Inne");
                     break;
                 case "9":
-                    Console.WriteLine("9.  Inomhus - Sortering av torraste till fuktigaste dagen enligt medelluftfuktighet per dag");
-                    Console.ReadKey();
+                    MenuSorteraTorrastTillFuktigast("Inne");
                     break;
                 case "10":
                     Console.WriteLine("10. Inomhus - Sortering av minst till störst risk för mögel");
@@ -105,7 +104,10 @@ public class Program
 
 
                 case "0":
-                    Console.WriteLine("Avslutar programmet...");
+                    Console.Clear();
+                    Console.WriteLine("Tryck på en tangent för att avslutar programmet...");
+                    Console.WriteLine("Made by Stefan, tack för din medverkan... May the code be with you...always");
+                    Console.ReadKey();
                     return;
 
                 default:
@@ -190,6 +192,34 @@ public class Program
         }
 
         Console.WriteLine("\nTryck valfri tangent för att återgå...");
+        Console.ReadKey();
+    }
+
+    // Sortera torraste till fuktigaste dagen enligt medelluftfuktighet per dag
+    private static void MenuSorteraTorrastTillFuktigast(string plats)
+    {
+        Console.Clear();
+        Console.WriteLine($"Sortering: Torraste -> Fuktigaste ({plats})\n");
+
+        // öppnar databasanslutningen (dispose automatiskt med 'using var').
+        using var db = new WeatherDBContext();
+
+        // Hämtar den aggregerade och sorterade listan från metoden i Core
+        var lista = WeatherCalculations.SorteraTorrastTillFuktigast(
+            db.WeatherRecords,
+            plats
+        );
+
+        Console.WriteLine("Datum         Medelfuktighet (%)");
+        Console.WriteLine("---------------------------------");
+
+        // Visa topp 30 dagar
+        foreach (var dag in lista.Take(30))
+        {
+            Console.WriteLine($"{dag.Datum:yyyy-MM-dd}    {dag.MedelFuktighet:F1}%");
+        }
+
+        Console.WriteLine("\nTryck valfri tangent för att koma tillbaks till meny...");
         Console.ReadKey();
     }
 }

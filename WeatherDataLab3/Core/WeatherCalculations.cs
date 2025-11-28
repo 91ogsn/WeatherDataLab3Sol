@@ -10,7 +10,7 @@ namespace WeatherDataLab3.Core
     public static class WeatherCalculations
     {
         // === Metod för att beräkna medeltemperatur för en given dag och plats === \\
-        public static double? AverageTemperatureForDate(IQueryable<WeatherRecord> records, DateTime date, string plats)  
+        public static double? AverageTemperatureForDate(IQueryable<WeatherRecord> records, DateTime date, string plats)
         {
             // Använder Datum och Plats för att filtrera poster och efter om Temp har värde
             var query = records
@@ -27,7 +27,7 @@ namespace WeatherDataLab3.Core
 
 
         // === Sortering varmaste till kallaste dagen enligt medeltemperatur per dag === \\
-        public static IEnumerable<(DateTime Datum, double MedelTemp)>SorteraVarmastTillKallast(IQueryable<WeatherRecord> records, string plats)
+        public static IEnumerable<(DateTime Datum, double MedelTemp)> SorteraVarmastTillKallast(IQueryable<WeatherRecord> records, string plats)
         {
             // Gruppera poster efter datum där platsen matchar och Temp har värde
             var query = records
@@ -40,8 +40,33 @@ namespace WeatherDataLab3.Core
                 })
                 .OrderByDescending(x => x.MedelTemp) // sortera från varmaste till kallaste
                 .ToList(); // exekvera frågan och hämta resultatet som lista
-            
+
             return query.Select(x => (x.Datum, x.MedelTemp));
+        }
+
+        // === Metod för sortering torraste till fuktigaste dagen enligt medelluftfuktighet per dag === \\
+        public static IEnumerable<(DateTime Datum, double MedelFuktighet)> SorteraTorrastTillFuktigast(IQueryable<WeatherRecord> records, string plats)
+        {
+            // Filtrera bort alla rader som inte matchar platsen ("Ute"/"Inne")
+            // och som saknar luftfuktighetsvärde (NULL).
+            var query = records
+                .Where(r => r.Plats == plats && r.Luftfuktighet.HasValue)
+
+                // grupperar alla rader som tillhör samma datum så vi kan räkna medelvärdet per dag.
+                .GroupBy(r => r.Datum.Date)
+
+                // Beräkna dagens genomssnittliga luftfuktighet(vi vet att värdena inte är nulll pga HasValue ovan)
+                .Select(g => new
+                {
+                    Datum = g.Key,
+                    MedelFuktighet = g.Average(x => x.Luftfuktighet!.Value)
+                })
+
+                // Sortering stigande (torrast → fuktigast)
+                .OrderBy(x => x.MedelFuktighet)
+                .ToList();
+
+            return query.Select(x => (x.Datum, x.MedelFuktighet));
         }
     }
 }
