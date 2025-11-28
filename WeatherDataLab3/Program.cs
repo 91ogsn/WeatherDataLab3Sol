@@ -75,15 +75,14 @@ public class Program
                     MenuSorteraTorrastTillFuktigast("Ute");
                     break;
                 case "4":
-                    Console.WriteLine("4. Utomhus - Sortering av minst till störst risk för mögel");
-                    Console.ReadKey();
+                    MenuSorteraMogelRisk("Ute");
                     break;
                 case "5":
-                    Console.WriteLine("5. Utomhus - Datum för meteorologisk Höst");
+                    //Console.WriteLine("5. Utomhus - Datum för meteorologisk Höst");
                     Console.ReadKey();
                     break;
                 case "6":
-                    Console.WriteLine("6. Utomhus - Datum för meteorologisk Vinter");
+                    //Console.WriteLine("6. Utomhus - Datum för meteorologisk Vinter");
                     Console.ReadKey();
                     break;
 
@@ -98,8 +97,7 @@ public class Program
                     MenuSorteraTorrastTillFuktigast("Inne");
                     break;
                 case "10":
-                    Console.WriteLine("10. Inomhus - Sortering av minst till störst risk för mögel");
-                    Console.ReadKey();
+                    MenuSorteraMogelRisk("Inne");
                     break;
 
 
@@ -220,6 +218,32 @@ public class Program
         }
 
         Console.WriteLine("\nTryck valfri tangent för att koma tillbaks till meny...");
+        Console.ReadKey();
+    }
+
+    // Sortera minst till störst risk för mögel
+    private static void MenuSorteraMogelRisk(string plats)
+    {
+        Console.Clear();
+        Console.WriteLine($"Sortering: Minst till Störst Mögelrisk ({plats})\n");
+
+        using var db = new WeatherDBContext();
+
+        // Hämta sorterad lista från metod i WeatherCalculations
+        var lista = WeatherCalculations.SorteraMogelRisk(
+            db.WeatherRecords,
+            plats
+        );
+
+        Console.WriteLine("Datum         Mögelrisk");
+        Console.WriteLine("------------------------");
+
+        foreach (var dag in lista.Take(100)) // visa topp 100 till användaren
+        {
+            Console.WriteLine($"{dag.Datum:yyyy-MM-dd}    {dag.Moldrisk:F2}");
+        }
+
+        Console.WriteLine("\nTryck valfri tangent för att komma tillbaka till meny...");
         Console.ReadKey();
     }
 }

@@ -68,5 +68,28 @@ namespace WeatherDataLab3.Core
 
             return query.Select(x => (x.Datum, x.MedelFuktighet));
         }
+
+        // === Metod för sortering av minst till störst risk för mögel === \\
+        public static IEnumerable<(DateTime Datum, double Moldrisk)> SorteraMogelRisk(IQueryable<WeatherRecord> records, string plats)
+        {
+            // Filtrera på vald plats ("Ute" eller "Inne")
+            // och kräv att både temperatur och luftfuktighet finns.
+            var query = records
+                .Where(r => r.Plats == plats &&
+                            r.Temp.HasValue &&
+                            r.Luftfuktighet.HasValue)
+                .AsEnumerable() // Gör resten av beräkningen i C#
+                .GroupBy(r => r.Datum.Date)  // Gruppera per dag               
+                .Select(g => new         
+                {
+                    Datum = g.Key,
+                    MedelRisk = g.Average(x => x.Moldrisk)  // Beräkna dagens Mögelrisk som medelvärde.
+                })                
+                .OrderBy(x => x.MedelRisk)// Sortera stigande (minst → störst risk)
+                .ToList();
+
+            // Returnera datum och risk
+            return query.Select(x => (x.Datum, x.MedelRisk));
+        }
     }
 }
