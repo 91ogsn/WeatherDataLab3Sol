@@ -103,7 +103,7 @@ public class Program
                     Console.Clear();
                     Console.WriteLine("Tryck på en tangent för att avslutar programmet...\\");
                     Console.WriteLine("\nTack så mycket Claes för den här tiden genom kurserna, har varit kul! \n\n");
-                    Console.WriteLine("Mvh Stefan,  May the code be with you...always");
+                    Console.WriteLine("Mvh Stefan,  May the code be with you....always");
                     Console.ReadKey();
                     return;
 
